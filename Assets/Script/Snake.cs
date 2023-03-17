@@ -8,11 +8,15 @@ public class Snake : MonoBehaviour
     /* in order to the Snake moves automatticly in a direction, i'm goig to need two variables: Speed and direction.
         So when de player press a Key change de direction.
     */
-    [SerializeField] private float speed = 2f;
+    private float speed = 10f;
+     private Vector2 direction = Vector2.left; //default snake direction
+
     public float speedMultiplier = 1f;
     private float nextUpdate;
-    private Vector2 direction = Vector2.left; //default snake direction
 
+   private void Start() {
+      this.direction = Vector2.left;
+   }
   
     private void Update() {
       if (Input.GetKeyDown(KeyCode.A) && direction != Vector2.right){
@@ -27,57 +31,86 @@ public class Snake : MonoBehaviour
       else if (Input.GetKeyDown(KeyCode.S) && direction != Vector2.up){
          direction = Vector2.down;
       }   
-
-
       
-    }
+   }
     
 
     private void FixedUpdate() {
         
-      // Investigate why doesn't work !!!
-      // Vector3 newPosition = transform.position + (Vector3)(direction * speed * Time.fixedDeltaTime);
-      // Debug.Log(transform.position + " + " +  Mathf.Ceil(newPosition.x) + "," + Mathf.Ceil(newPosition.y) + "," + 0f);
-      // transform.position = new Vector3(Mathf.Ceil(newPosition.x), Mathf.Ceil(newPosition.y), 0f);
+      // Investigate why doesn't work the speed of the object if I change de value of speed variable !!!
+      // Debug.Log("direction: " + direction);
+      // Debug.Log("transform.position: " + transform.position);
+
+      // Vector3 newPosition = transform.position + (Vector3)(direction * speed * (Time.fixedDeltaTime * speed));
+      // Debug.Log("newPosition: " + newPosition);
+      
+      // if (direction.x < 0) {
+      //    newPosition.x = Mathf.Floor(newPosition.x);
+      // } else if (direction.x > 0) {
+      //    newPosition.x = Mathf.Ceil(newPosition.x);
+      // }
+      // if (direction.y < 0) {
+      //    newPosition.y = Mathf.Floor(newPosition.y);
+      // } else if (direction.y > 0) {
+      //    newPosition.y = Mathf.Ceil(newPosition.y);
+      // }
+      // Debug.Log("newPosition arounded: " + newPosition);
+      // transform.position = newPosition;
+      //-------------------------------------------------------------------------------------------------------------
       
 
       // Can I manage the speed of the snake with this code??
-      // this.transform.position = new Vector3(
-      //    Mathf.Round(this.transform.position.x) + direction.x  ,
-      //    Mathf.Round(this.transform.position.y) + direction.y  ,
-      //    0
-      // );
+      // this.transform.position += new Vector3(
+      //    Mathf.Round(this.transform.position.x)  ,
+      //    Mathf.Round(this.transform.position.y)  ,
+      //    0) + (Vector3)(direction * speed * Time.fixedDeltaTime);
       // ----------------------------------------------------------------------------
 
-      // this.transform.position += new Vector3(
-      //    direction.x * speed * Time.fixedDeltaTime,
-      //    direction.y * speed * Time.fixedDeltaTime,
-      //    0
-      // );
+      Debug.Log("direction: " + direction);
+      Debug.Log("transform.position: " + transform.position);
+      Debug.Log("Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.x) +" + " + (direction.x * speed * Time.fixedDeltaTime) + " = " + (Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)));
+      Debug.Log("Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.y) +" + " + (direction.y * speed * Time.fixedDeltaTime)+ " = " + (Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)));
 
-      // if (Time.time < nextUpdate) {
-      //   return;
-      // }
+      this.transform.position = new Vector3(
+         Mathf.Round(Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)),
+         Mathf.Round(Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)),
+         0
+      );
 
-      // Set each segment's position to be the same as the one it follows. We
-      // must do this in reverse order so the position is set to the previous
-      // position, otherwise they will all be stacked on top of each other.
-      // for (int i = segments.Count - 1; i > 0; i--) {
-      //    segments[i].position = segments[i - 1].position;
-      // }
+      //Wait until the next update before proceeding
+      
+      Debug.Log("Time.Time: " + Time.time);
+      Debug.Log("nextUpdate: " + nextUpdate);
 
-      // Move the snake in the direction it is facing
-      // Round the values to ensure it aligns to the grid
-      float x = Mathf.Round(transform.position.x) + direction.x;
-       float y = Mathf.Round(transform.position.y) + direction.y;
+        if (Time.time < nextUpdate) {
+            return;
+        }
 
-      transform.position = new Vector2(x, y);
-      //nextUpdate = Time.time + (1f / (speed * speedMultiplier));
-    }
-     
-        
-   
-    
+        // Set each segment's position to be the same as the one it follows. We
+        // must do this in reverse order so the position is set to the previous
+        // position, otherwise they will all be stacked on top of each other.
+      //   for (int i = segments.Count - 1; i > 0; i--) {
+      //       segments[i].position = segments[i - 1].position;
+      //   }
+
+        // Move the snake in the direction it is facing
+        // Round the values to ensure it aligns to the grid
+        float x = transform.position.x + direction.x;
+        float y = transform.position.y + direction.y;
+
+         if (direction.x < 0) {
+            x = Mathf.Floor(x);
+         } else if (direction.x > 0) {
+            x = Mathf.Ceil(x);
+         }
+         if (direction.y < 0) {
+            y = Mathf.Floor(y);
+         } else if (direction.y > 0) {
+            y = Mathf.Ceil(y);
+         }
+        transform.position = new Vector2(x, y);
+        nextUpdate = Time.time + (1f / (speed * speedMultiplier));
+    } 
     
 }
 
