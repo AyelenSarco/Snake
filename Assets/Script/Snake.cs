@@ -8,14 +8,21 @@ public class Snake : MonoBehaviour
     /* in order to the Snake moves automatticly in a direction, i'm goig to need two variables: Speed and direction.
         So when de player press a Key change de direction.
     */
-    private float speed = 10f;
-     private Vector2 direction = Vector2.left; //default snake direction
+    private float speed = 15f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD) 
+    private Vector2 direction = Vector2.left; //default snake direction
+    public Transform Segment;
+    private List<Transform> segments;
 
-    public float speedMultiplier = 1f;
+    private float speedMultiplier = 1f;
     private float nextUpdate;
+
+
 
    private void Start() {
       this.direction = Vector2.left;
+      segments = new List<Transform>();
+
+      this.segments.Add(this.transform);
    }
   
     private void Update() {
@@ -57,25 +64,17 @@ public class Snake : MonoBehaviour
       // Debug.Log("newPosition arounded: " + newPosition);
       // transform.position = newPosition;
       //-------------------------------------------------------------------------------------------------------------
-      
 
-      // Can I manage the speed of the snake with this code??
-      // this.transform.position += new Vector3(
-      //    Mathf.Round(this.transform.position.x)  ,
-      //    Mathf.Round(this.transform.position.y)  ,
-      //    0) + (Vector3)(direction * speed * Time.fixedDeltaTime);
-      // ----------------------------------------------------------------------------
+      // Debug.Log("direction: " + direction);
+      // Debug.Log("transform.position: " + transform.position);
+      // Debug.Log("Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.x) +" + " + (direction.x * speed * Time.fixedDeltaTime) + " = " + (Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)));
+      // Debug.Log("Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.y) +" + " + (direction.y * speed * Time.fixedDeltaTime)+ " = " + (Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)));
 
-      Debug.Log("direction: " + direction);
-      Debug.Log("transform.position: " + transform.position);
-      Debug.Log("Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.x) +" + " + (direction.x * speed * Time.fixedDeltaTime) + " = " + (Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)));
-      Debug.Log("Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.y) +" + " + (direction.y * speed * Time.fixedDeltaTime)+ " = " + (Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)));
-
-      this.transform.position = new Vector3(
-         Mathf.Round(Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)),
-         Mathf.Round(Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)),
-         0
-      );
+      // this.transform.position = new Vector3(
+      //    Mathf.Round(Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)),
+      //    Mathf.Round(Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)),
+      //    0
+      // );
 
       //Wait until the next update before proceeding
       
@@ -86,17 +85,19 @@ public class Snake : MonoBehaviour
             return;
         }
 
-        // Set each segment's position to be the same as the one it follows. We
-        // must do this in reverse order so the position is set to the previous
-        // position, otherwise they will all be stacked on top of each other.
+      // Set each segment's position to be the same as the one it follows. We
+      // must do this in reverse order so the position is set to the previous
+      // position, otherwise they will all be stacked on top of each other.
       //   for (int i = segments.Count - 1; i > 0; i--) {
       //       segments[i].position = segments[i - 1].position;
       //   }
 
         // Move the snake in the direction it is facing
-        // Round the values to ensure it aligns to the grid
+        
         float x = transform.position.x + direction.x;
         float y = transform.position.y + direction.y;
+
+        // Round the values to ensure it aligns to the grid. The rounding depends on the current direction of the snake.
 
          if (direction.x < 0) {
             x = Mathf.Floor(x);
@@ -112,6 +113,15 @@ public class Snake : MonoBehaviour
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     } 
     
+    private void Grow(){
+
+    }
+    private void OnTriggerEnter2D(Collider2D other) {
+
+       if (other.tag == "Food"){
+        Grow();
+       } 
+    }
 }
 
 
@@ -121,4 +131,11 @@ public class Snake : MonoBehaviour
 
       - (direction * speed * Time.fixedDeltaTime) multiplies the direction vector by the speed variable and Time.fixedDeltaTime 
          to get a vector that represents the amount of movement that should be applied to the Snake in this fixed update.
+
+
+      TO DO:
+       - funcion que verifiqeu cantidad de alimento comido para modificar velocidad
+       - funcion para crecer cuando come comida
+       - colisiones
+       - resetear start
 */
