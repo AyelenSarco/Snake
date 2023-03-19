@@ -8,21 +8,25 @@ public class Snake : MonoBehaviour
     /* in order to the Snake moves automatticly in a direction, i'm goig to need two variables: Speed and direction.
         So when de player press a Key change de direction.
     */
-    private float speed = 15f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD) 
+     
     private Vector2 direction = Vector2.left; //default snake direction
-    public Transform Segment;
-    private List<Transform> segments;
+    private int initialSize = 4;
 
+    // for handle the Snake's segments
+    public Transform segment;
+    private List<Transform> segments = new List<Transform>();
+
+
+    // for handle the velocity :
+    private float speed = 15f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
     private float speedMultiplier = 1f;
     private float nextUpdate;
 
 
 
    private void Start() {
-      this.direction = Vector2.left;
-      segments = new List<Transform>();
-
-      this.segments.Add(this.transform);
+      ResetState();
+      
    }
   
     private void Update() {
@@ -86,11 +90,10 @@ public class Snake : MonoBehaviour
         }
 
       // Set each segment's position to be the same as the one it follows. We
-      // must do this in reverse order so the position is set to the previous
-      // position, otherwise they will all be stacked on top of each other.
-      //   for (int i = segments.Count - 1; i > 0; i--) {
-      //       segments[i].position = segments[i - 1].position;
-      //   }
+      // must do this in reverse order before we move the head.
+        for (int i = segments.Count - 1; i > 0; i--) {
+            segments[i].position = segments[i - 1].position;
+        }
 
         // Move the snake in the direction it is facing
         
@@ -109,18 +112,62 @@ public class Snake : MonoBehaviour
          } else if (direction.y > 0) {
             y = Mathf.Ceil(y);
          }
+         
         transform.position = new Vector2(x, y);
         nextUpdate = Time.time + (1f / (speed * speedMultiplier));
     } 
     
-    private void Grow(){
 
+    private void Grow(){
+         Transform newSegment = Instantiate(this.segment);
+         newSegment.position = segments[segments.Count - 1].position;
+
+         this.segments.Add(newSegment);
     }
     private void OnTriggerEnter2D(Collider2D other) {
 
        if (other.tag == "Food"){
-        Grow();
-       } 
+         Grow();
+       } else if ( other.tag == "Obstacle"){
+         ResetState();
+       } else if (other.tag == "Wall") {
+            if (direction == Vector2.down) {
+               this.transform.position = new Vector2(this.transform.position.x,
+                                                      - (other.transform.position.y + 1));
+            } else if ( direction == Vector2.up){
+               this.transform.position = new Vector2(this.transform.position.x,
+                                                      - (other.transform.position.y - 1));
+            } else if (direction == Vector2.left) {
+               this.transform.position = new Vector2(- (this.transform.position.x + 1 ),
+                                                      this.transform.position.y);
+            } else if (direction == Vector2.right) {
+               this.transform.position = new Vector2(- (this.transform.position.x - 1 ),
+                                                      this.transform.position.y);
+            }
+       }
+    }
+
+    private void ResetState(){
+      this.direction = Vector2.left;
+      this.transform.position = Vector2.zero;
+
+      // destroy all the element of the snake except the head
+      for (int i = 1; i < segments.Count; i++) {
+         Destroy(segments[i].gameObject);
+      }
+
+      // Removes all elements from the snake
+      this.segments.Clear();
+
+      // Add the head
+      this.segments.Add(this.transform);
+
+      // enlarge the snake to the initial size
+      for (int i = 0; i < initialSize; i++){
+         Grow();
+      }
+
+
     }
 }
 

@@ -311,7 +311,7 @@ GameObject:
   - component: {fileID: 890883899}
   m_Layer: 0
   m_Name: Food
-  m_TagString: Untagged
+  m_TagString: Food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -376,7 +376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 890883895}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -407,7 +407,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75, y: 0.75}
+  m_Size: {x: 0.6, y: 0.6}
   m_EdgeRadius: 0
 --- !u!114 &890883899
 MonoBehaviour:
@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 1204559587}
   m_Layer: 0
   m_Name: below
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -578,8 +578,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1249226259}
   - component: {fileID: 1249226258}
-  - component: {fileID: 1249226262}
   - component: {fileID: 1249226263}
+  - component: {fileID: 1249226262}
   - component: {fileID: 1249226261}
   m_Layer: 0
   m_Name: Segment
@@ -649,7 +649,7 @@ Transform:
   m_GameObject: {fileID: 1249226257}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.85, y: 0.85, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 456949714}
@@ -714,7 +714,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3595c7720d549a148bc70d7de9e97bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Segment: {fileID: 6176800102864041419, guid: 4806b62640e4bd3448ca8f7eb6b6216b, type: 3}
+  segment: {fileID: 6176800102864041419, guid: 4806b62640e4bd3448ca8f7eb6b6216b, type: 3}
 --- !u!1 &1756385935
 GameObject:
   m_ObjectHideFlags: 0
@@ -728,7 +728,7 @@ GameObject:
   - component: {fileID: 1756385938}
   m_Layer: 0
   m_Name: left
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -839,7 +839,7 @@ GameObject:
   - component: {fileID: 1832808476}
   m_Layer: 0
   m_Name: above
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -950,7 +950,7 @@ GameObject:
   - component: {fileID: 2028255597}
   m_Layer: 0
   m_Name: right
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
