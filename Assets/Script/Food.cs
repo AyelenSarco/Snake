@@ -6,27 +6,32 @@ public class Food : MonoBehaviour
 {
 
     public BoxCollider2D foodArea;
-    // Start is called before the first frame update
-
-    private void RandomPosition(){
-        Bounds bound = this.foodArea.bounds;
-
-        float x = Random.Range(bound.min.x ,bound.max.x);
-        float y = Random.Range(bound.min.y ,bound.max.y);
-
-        this.transform.position = new Vector3(Mathf.Round(x),Mathf.Round(y),0.0f);
-    }
+    [SerializeField] GameManager manager;
 
     void Start()
     {
-        RandomPosition();
+        SpawnFood();
     }
 
-    // Update is called once per frame
+    private void SpawnFood(){
+            Bounds bound = this.foodArea.bounds;
+            Vector2 foodPosition;
+            do {
+                float x = Random.Range(bound.min.x ,bound.max.x);
+                float y = Random.Range(bound.min.y ,bound.max.y);
+                foodPosition = new Vector2(Mathf.Round(x),Mathf.Round(y));
+            } while (manager.FoodCollidesWithSegment(foodPosition));
+            
+            this.transform.position = foodPosition;
+        }
+    
+    
+
+
     private void OnTriggerEnter2D(Collider2D other) {
 
        if (other.tag == "Player"){
-        RandomPosition();
+        SpawnFood();
        } 
     }
 }

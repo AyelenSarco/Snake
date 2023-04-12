@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Snake : MonoBehaviour
 {
-
+   [SerializeField] GameManager manager;
     /* in order to the Snake moves automatticly in a direction, i'm goig to need two variables: Speed and direction.
         So when de player press a Key change de direction.
     */
@@ -18,7 +18,7 @@ public class Snake : MonoBehaviour
 
 
     // for handle the velocity :
-    private float speed = 15f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
+    private float speed = 10f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
     private float speedMultiplier = 1f;
     private float nextUpdate;
 
@@ -30,16 +30,16 @@ public class Snake : MonoBehaviour
    }
   
     private void Update() {
-      if (Input.GetKeyDown(KeyCode.A) && direction != Vector2.right){
+      if ((Input.GetKeyDown(KeyCode.A) || (Input.GetKeyDown(KeyCode.LeftArrow))) && direction != Vector2.right){
          direction = Vector2.left; 
       } 
-      else if (Input.GetKeyDown(KeyCode.D) && direction != Vector2.left){
+      else if ((Input.GetKeyDown(KeyCode.D) || (Input.GetKeyDown(KeyCode.RightArrow))) && direction != Vector2.left){
          direction = Vector2.right;
       } 
-      else if (Input.GetKeyDown(KeyCode.W) && direction != Vector2.down){
+      else if ((Input.GetKeyDown(KeyCode.W) || (Input.GetKeyDown(KeyCode.UpArrow))) && direction != Vector2.down){
          direction = Vector2.up;
       } 
-      else if (Input.GetKeyDown(KeyCode.S) && direction != Vector2.up){
+      else if ((Input.GetKeyDown(KeyCode.S) || (Input.GetKeyDown(KeyCode.DownArrow))) && direction != Vector2.up){
          direction = Vector2.down;
       }   
       
@@ -48,37 +48,6 @@ public class Snake : MonoBehaviour
 
     private void FixedUpdate() {
         
-      // Investigate why doesn't work the speed of the object if I change de value of speed variable !!!
-      // Debug.Log("direction: " + direction);
-      // Debug.Log("transform.position: " + transform.position);
-
-      // Vector3 newPosition = transform.position + (Vector3)(direction * speed * (Time.fixedDeltaTime * speed));
-      // Debug.Log("newPosition: " + newPosition);
-      
-      // if (direction.x < 0) {
-      //    newPosition.x = Mathf.Floor(newPosition.x);
-      // } else if (direction.x > 0) {
-      //    newPosition.x = Mathf.Ceil(newPosition.x);
-      // }
-      // if (direction.y < 0) {
-      //    newPosition.y = Mathf.Floor(newPosition.y);
-      // } else if (direction.y > 0) {
-      //    newPosition.y = Mathf.Ceil(newPosition.y);
-      // }
-      // Debug.Log("newPosition arounded: " + newPosition);
-      // transform.position = newPosition;
-      //-------------------------------------------------------------------------------------------------------------
-
-      // Debug.Log("direction: " + direction);
-      // Debug.Log("transform.position: " + transform.position);
-      // Debug.Log("Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.x) +" + " + (direction.x * speed * Time.fixedDeltaTime) + " = " + (Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)));
-      // Debug.Log("Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime) --> " + Mathf.Round(transform.position.y) +" + " + (direction.y * speed * Time.fixedDeltaTime)+ " = " + (Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)));
-
-      // this.transform.position = new Vector3(
-      //    Mathf.Round(Mathf.Round(transform.position.x) + (direction.x * speed * Time.fixedDeltaTime)),
-      //    Mathf.Round(Mathf.Round(transform.position.y) + (direction.y * speed * Time.fixedDeltaTime)),
-      //    0
-      // );
 
       //Wait until the next update before proceeding
       
@@ -124,10 +93,14 @@ public class Snake : MonoBehaviour
 
          this.segments.Add(newSegment);
     }
+
+
+
     private void OnTriggerEnter2D(Collider2D other) {
 
        if (other.tag == "Food"){
          Grow();
+         manager.AddScore();
        } else if ( other.tag == "Obstacle"){
          ResetState();
        } else if (other.tag == "Wall") {
@@ -147,7 +120,10 @@ public class Snake : MonoBehaviour
        }
     }
 
+   // move to manager
     private void ResetState(){
+      manager.OnLose();
+
       this.direction = Vector2.left;
       this.transform.position = Vector2.zero;
 
@@ -167,8 +143,18 @@ public class Snake : MonoBehaviour
          Grow();
       }
 
-
     }
+
+
+    public bool IsCollidingWithFood(Vector2 position) {
+        foreach (Transform segment in segments) {
+            if (segment.position == (Vector3)position) {
+               return true;
+            }
+        }
+        return false;
+    }
+
 }
 
 
