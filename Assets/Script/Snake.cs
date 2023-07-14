@@ -5,20 +5,14 @@ using UnityEngine;
 public class Snake : MonoBehaviour
 {
    [SerializeField] GameManager manager;
-    /* in order to the Snake moves automatticly in a direction, i'm goig to need two variables: Speed and direction.
-        So when de player press a Key change de direction.
-    */
-     
     private Vector2 direction = Vector2.left; //default snake direction
     private int initialSize = 4;
-
-    // for handle the Snake's segments
     public Transform segment;
     private List<Transform> segments = new List<Transform>();
 
-
+    private bool inputDisabled;
     // for handle the velocity :
-    private float speed = 10f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
+    [SerializeField] private float speed = 10f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
     private float speedMultiplier = 1f;
     private float nextUpdate;
 
@@ -26,25 +20,46 @@ public class Snake : MonoBehaviour
 
    private void Start() {
       ResetState();
+      inputDisabled = false;
       
    }
   
     private void Update() {
-      if ((Input.GetKeyDown(KeyCode.A) || (Input.GetKeyDown(KeyCode.LeftArrow))) && direction != Vector2.right){
-         direction = Vector2.left; 
-      } 
-      else if ((Input.GetKeyDown(KeyCode.D) || (Input.GetKeyDown(KeyCode.RightArrow))) && direction != Vector2.left){
-         direction = Vector2.right;
-      } 
-      else if ((Input.GetKeyDown(KeyCode.W) || (Input.GetKeyDown(KeyCode.UpArrow))) && direction != Vector2.down){
-         direction = Vector2.up;
-      } 
-      else if ((Input.GetKeyDown(KeyCode.S) || (Input.GetKeyDown(KeyCode.DownArrow))) && direction != Vector2.up){
-         direction = Vector2.down;
-      }   
-      
+      if (!inputDisabled){
+         if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && direction != Vector2Int.right)
+         {
+               
+            direction = Vector2Int.left;
+            inputDisabled = true;
+         }
+         else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && direction != Vector2Int.left)
+         {
+
+            direction = Vector2Int.right;
+            inputDisabled = true;               
+         }
+         else if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && direction != Vector2Int.down)
+         {
+               
+            direction = Vector2Int.up;
+            inputDisabled = true;
+         }
+         else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && direction != Vector2Int.up)
+         {
+
+            direction = Vector2Int.down;
+            inputDisabled = true;   
+         }
+
+         
+         Invoke("EnableInput", 0.02f);
+    }
+       
    }
     
+   private void EnableInput(){
+      this.inputDisabled = false;
+   }
 
     private void FixedUpdate() {
         
@@ -103,6 +118,7 @@ public class Snake : MonoBehaviour
          manager.AddScore();
        } else if ( other.tag == "Obstacle"){
          ResetState();
+         manager.OnLose();
        } else if (other.tag == "Wall") {
             if (direction == Vector2.down) {
                this.transform.position = new Vector2(this.transform.position.x,
@@ -122,7 +138,6 @@ public class Snake : MonoBehaviour
 
    // move to manager
     private void ResetState(){
-      manager.OnLose();
 
       this.direction = Vector2.left;
       this.transform.position = Vector2.zero;
@@ -143,6 +158,8 @@ public class Snake : MonoBehaviour
          Grow();
       }
 
+      this.speed = 10;
+
     }
 
 
@@ -155,6 +172,11 @@ public class Snake : MonoBehaviour
         return false;
     }
 
+   public void increaseSpeed() {
+      if (this.speed < 30f){
+         this.speed += 1f;
+      }
+   }
 }
 
 

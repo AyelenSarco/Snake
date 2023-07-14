@@ -5,10 +5,15 @@ public class GameManager : MonoBehaviour
 {
     private static int record = 0;
     private int score;
+    private bool unmute = true;
     [SerializeField] TMP_Text scoreTxt;
     [SerializeField] TMP_Text recordTxt;
 
     [SerializeField] Snake snake;
+    [SerializeField] AudioSource pointSource;
+    [SerializeField] AudioSource loseSource;
+    
+
 
     private void Start() {
         UpdateRecord();
@@ -20,14 +25,20 @@ public class GameManager : MonoBehaviour
 
 
     public void AddScore(){
-        this.scoreTxt.text = (this.score += 10).ToString();
+        this.scoreTxt.text = (this.score += 100).ToString();
+        pointSource.Play();
+        if (score % 30 == 0){
+            snake.increaseSpeed();
+        }
     }
 
 
     public void OnLose(){
+        
         SetRecord();
         ResetScore();
         UpdateRecord();
+        loseSource.Play();
     }
 
     private void SetRecord(){
@@ -48,6 +59,19 @@ public class GameManager : MonoBehaviour
     public bool FoodCollidesWithSegment(Vector2 foodPosition) {
         
         return snake.IsCollidingWithFood(foodPosition);;
+    }
+
+    public void Mute(){
+        if (unmute){
+            pointSource.volume = 0f;
+            loseSource.volume = 0f;
+            unmute = false;
+        } else {
+            pointSource.volume = 1f;
+            loseSource.volume = 1f;
+            unmute = true;
+        }
+        
     }
 
 }
