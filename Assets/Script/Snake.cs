@@ -26,25 +26,25 @@ public class Snake : MonoBehaviour
   
     private void Update() {
       if (!inputDisabled){
-         if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && direction != Vector2Int.right)
+         if ((Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) && direction != Vector2Int.right)
          {
                
             direction = Vector2Int.left;
             inputDisabled = true;
          }
-         else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && direction != Vector2Int.left)
+         else if ((Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) && direction != Vector2Int.left)
          {
 
             direction = Vector2Int.right;
             inputDisabled = true;               
          }
-         else if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && direction != Vector2Int.down)
+         else if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && direction != Vector2Int.down)
          {
                
             direction = Vector2Int.up;
             inputDisabled = true;
          }
-         else if ((Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow)) && direction != Vector2Int.up)
+         else if ((Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)) && direction != Vector2Int.up)
          {
 
             direction = Vector2Int.down;
@@ -66,9 +66,9 @@ public class Snake : MonoBehaviour
 
       //Wait until the next update before proceeding
       
-      Debug.Log("Time.Time: " + Time.time);
-      Debug.Log("nextUpdate: " + nextUpdate);
-
+      // Debug.Log("Time.Time: " + Time.time);
+      // Debug.Log("nextUpdate: " + nextUpdate);
+      Debug.Log("Snake head position: " + transform.position.x + "," + transform.position.y );
         if (Time.time < nextUpdate) {
             return;
         }

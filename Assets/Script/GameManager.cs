@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
 
 
     public void OnLose(){
-        
         SetRecord();
         ResetScore();
         UpdateRecord();
