@@ -12,7 +12,7 @@ public class Snake : MonoBehaviour
 
     private bool inputDisabled;
     // for handle the velocity :
-    [SerializeField] private float speed = 10f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
+    [SerializeField] private float speed = 6.5f;   // for more velocity increase it's value. Values between 5 to 20/5 (25 level GOOD)
     private float speedMultiplier = 1f;
     private float nextUpdate;
 
@@ -158,7 +158,7 @@ public class Snake : MonoBehaviour
          Grow();
       }
 
-      this.speed = 10;
+      this.speed = 6.5f;
 
     }
 
@@ -174,7 +174,7 @@ public class Snake : MonoBehaviour
 
    public void increaseSpeed() {
       if (this.speed < 30f){
-         this.speed += 1f;
+         this.speed += 0.25f;
       }
    }
 }

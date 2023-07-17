@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(){
         this.scoreTxt.text = (this.score += 100).ToString();
         pointSource.Play();
-        if (score % 30 == 0){
+        if (score % 200 == 0){
             snake.increaseSpeed();
         }
     }
